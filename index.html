@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>English Corrector Chatbot</title>
+  <style>
+    body { font-family: Arial; padding: 30px; background-color: #f9f9f9; }
+    textarea { width: 100%; height: 100px; }
+    button { padding: 10px 20px; margin-top: 10px; }
+    .response { margin-top: 20px; white-space: pre-wrap; }
+  </style>
+</head>
+<body>
+  <h2>📝 영어 문장 교정 GPT 챗봇</h2>
+  <p>아래에 영어 문장을 입력하면 GPT가 실시간으로 교정해줍니다.</p>
+  <textarea id="userInput" placeholder="입력 예: He go to school."></textarea>
+  <br>
+  <button onclick="sendToGPT()">교정 요청</button>
+  <div class="response" id="gptResponse"></div>
+
+  <script>
+    async function sendToGPT() {
+      const input = document.getElementById("userInput").value;
+      const responseBox = document.getElementById("gptResponse");
+      responseBox.innerHTML = "GPT가 응답 중입니다...";
+
+      const result = await fetch("https://api.openai.com/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer YOUR_API_KEY_HERE"
+        },
+        body: JSON.stringify({
+          model: "gpt-4",
+          messages: [
+            {
+              role: "system",
+              content: "You are an English tutor. Correct the user's grammar, explain the correction simply, and continue the conversation briefly."
+            },
+            {
+              role: "user",
+              content: input
+            }
+          ]
+        })
+      });
+
+      const data = await result.json();
+      const reply = data.choices[0].message.content;
+      responseBox.innerHTML = reply;
+    }
+  </script>
+</body>
+</html>
