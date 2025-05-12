@@ -24,9 +24,10 @@
       const input = document.getElementById("userInput").value.trim();
       const responseBox = document.getElementById("gptResponse");
 
+      // 빈 입력 검사
       if (!input) {
         responseBox.innerHTML = "<span class='error'>❗ 문장을 입력해주세요.</span>";
-        return;
+        return; // 요청 중단
       }
 
       responseBox.innerHTML = "⌛ GPT가 응답 중입니다... 잠시만 기다려주세요.";
