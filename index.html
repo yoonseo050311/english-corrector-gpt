@@ -24,30 +24,20 @@
       const responseBox = document.getElementById("gptResponse");
       responseBox.innerHTML = "GPT가 응답 중입니다...";
 
-      const result = await fetch("https://api.openai.com/v1/chat/completions", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": "Bearer YOUR_API_KEY_HERE"
-        },
-        body: JSON.stringify({
-          model: "gpt-3.5-turbo",
-          messages: [
-            {
-              role: "system",
-              content: "You are an English tutor. When a user writes a sentence, check the grammar and correct any mistakes clearly. First, show the corrected sentence, then briefly explain why. Be supportive and concise."
-            },
-            {
-              role: "user",
-              content: input
-            }
-          ]
-        })
-      });
+      try {
+        const result = await fetch("/api/chat", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ input })
+        });
 
-      const data = await result.json();
-      const reply = data.choices[0].message.content;
-      responseBox.innerHTML = reply;
+        const data = await result.json();
+        responseBox.innerHTML = data.reply;
+      } catch (error) {
+        responseBox.innerHTML = "❌ 오류가 발생했어요: " + error.message;
+      }
     }
   </script>
 </body>
